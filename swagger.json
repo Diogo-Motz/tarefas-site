@@ -1,0 +1,180 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API - Gerenciador de Tarefas",
+    "version": "1.0.0",
+    "description": "Documentação da API para login e gerenciamento de tarefas."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor Local"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Realiza login do usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "admin@email.com"
+                  },
+                  "senha": {
+                    "type": "string",
+                    "example": "123456"
+                  }
+                },
+                "required": ["email", "senha"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso"
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    },
+    "/tarefas": {
+      "get": {
+        "summary": "Lista todas as tarefas",
+        "responses": {
+          "200": {
+            "description": "Lista de tarefas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tarefa"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cria uma nova tarefa",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tarefa"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tarefa criada com sucesso"
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/tarefas/{id}": {
+      "put": {
+        "summary": "Atualiza uma tarefa existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tarefa"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tarefa atualizada com sucesso"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Exclui uma tarefa existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarefa excluída com sucesso"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Tarefa": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "example": "Estudar Node.js"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Ler os capítulos sobre Express e rotas."
+          },
+          "responsavel": {
+            "type": "string",
+            "example": "Luis"
+          },
+          "prioridade": {
+            "type": "string",
+            "enum": ["baixa", "media", "alta"],
+            "example": "alta"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["nao iniciada", "iniciada", "concluida"],
+            "example": "iniciada"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-05-01T08:00:00"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-05-01T12:00:00"
+          }
+        }
+      }
+    }
+  }
+}
